@@ -1,6 +1,17 @@
 [package]
 name = "BareMetalGame"
-version = "0.1.0"
+version = "0.4.0"
 edition = "2024"
 
 [dependencies]
+bootloader = "0.9.30"
+pc-keyboard = "0.8.0"
+pluggable_interrupt_os = "0.5.2"
+
+[dependencies.num]
+version = "0.4.0"
+default-features = false
+
+[dependencies.crossbeam]
+version = "0.8"
+default-features = false
