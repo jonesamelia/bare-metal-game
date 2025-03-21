@@ -85,7 +85,7 @@ impl Default for Frogger{
     fn default() -> Self {
         Self {
             player: Player::default(),
-            frogs: 5,
+            frogs: 7,
             obstacles: [Obstacle::default(); 10],
             lilypads: [LilyPad:: default(); 5],
             living: true,
@@ -96,7 +96,6 @@ impl Default for Frogger{
             currenty: BUFFER_HEIGHT - 4,
             openl: 5,
             started: true,
-           
 
         }
     }
@@ -148,10 +147,10 @@ impl Obstacle {
     fn draw(&mut self){
        // let h: &str = "{}"; BUFFER_HEIGHT;
         //plot_str(h, self.oy - 2, self.ox, ColorCode::new(self.color, Color::Black));
-        if self.ox >= 0{
-            plot('(', self.ox, self.oy, ColorCode::new(self.color, Color::Black));
-            plot('(', self.ox, self.oy - 1, ColorCode::new(self.color, Color::Black));
-        }
+        
+        plot('(', self.ox, self.oy, ColorCode::new(self.color, Color::Black));
+        plot('(', self.ox, self.oy - 1, ColorCode::new(self.color, Color::Black));
+        
         
         if self.ox + 1 < BUFFER_WIDTH{
             plot('0', self.ox + 1, self.oy, ColorCode::new(self.color, Color::Black));
@@ -275,6 +274,7 @@ impl Frogger {
         for i in 0..self.lilypads.len(){
             self.lilypads[i].lx = 7 + i*15;
         }
+        self.openl = self.lilypads.len();
 
         self.obstacles[1].ox = 30;
         self.obstacles[1].color = Color:: LightGray;
@@ -283,6 +283,7 @@ impl Frogger {
         self.obstacles[2].color = Color::LightBlue;
         self.obstacles[3].oy = 18;
         self.obstacles[3].ox = BUFFER_WIDTH - 30;
+        self.obstacles[3].color = Color::LightCyan;
         self.obstacles[4].oy = 16;
         self.obstacles[4].ox = 22;
         self.obstacles[4].color = Color::Red;
@@ -295,9 +296,13 @@ impl Frogger {
         self.obstacles[6].ox = 20;
         self.obstacles[6].color = Color::Yellow;
         self.obstacles[7].oy = 12;
+        self.obstacles[7].color = Color::White;
         self.obstacles[7].ox = BUFFER_WIDTH - 41;
         self.obstacles[8].oy = 10;
+        self.obstacles[8].speed = 2;
+        self.obstacles[8].color = Color::Brown;
         self.obstacles[9].oy = 10;
+        self.obstacles[9].speed = 2;
         self.obstacles[9].color = Color:: Cyan;
         self.obstacles[9].ox = BUFFER_WIDTH - 52;
 
@@ -317,6 +322,8 @@ impl Frogger {
             self.lilypads[i].drawreg();
             self.lilypads[i].taken = false;
         }
+        self.frogs = Frogger::default().frogs;
+        self.openl = self.lilypads.len();
     }
 
     fn clear(&mut self){
@@ -332,6 +339,7 @@ impl Frogger {
             if self.obstacles[i].checkcollide(self.player.px, self.player.py){
                 self.living = false;
                 self.frogs = self.frogs-1;
+                plot(' ', 25 +self.frogs, 1, ColorCode::new(Color::Black, Color::Black));
                 self.draw_ui();
             }
         }
@@ -398,6 +406,7 @@ impl Frogger {
                       self.score += 1000;
                       self.makelilypads();  
                       self.openl = 5;
+                      self.draw_ui();
                     }
                     self.frogs -= 1;
                     plot(' ', 25 +self.frogs, 1, ColorCode::new(Color::Black, Color::Black));
